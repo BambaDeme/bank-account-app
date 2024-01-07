@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerController {
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     @GetMapping("/customers")
     public List<Customer> getCustomers(){
