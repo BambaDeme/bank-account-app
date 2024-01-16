@@ -1,6 +1,8 @@
 package com.deme.ahmadou.accountservice.controllers;
 
+import com.deme.ahmadou.accountservice.clients.CustomerRestClient;
 import com.deme.ahmadou.accountservice.entities.Account;
+import com.deme.ahmadou.accountservice.models.Customer;
 import com.deme.ahmadou.accountservice.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.List;
 public class AccountController {
 
     private final AccountRepository accountRepository;
+    private final CustomerRestClient customerRestClient;
 
     @GetMapping("/accounts")
     public List<Account> getAllAccounts(){
@@ -25,6 +28,13 @@ public class AccountController {
 
     @GetMapping("/accounts/{id}")
     public Account getAccountById(@PathVariable String id){
-        return accountRepository.findById(id).get();
+
+        Account account = accountRepository.findById(id).get();
+
+        Customer customer = customerRestClient.getCustomerById(account.getCustomerId());
+
+        account.setCustomer(customer);
+
+        return account;
     }
 }
