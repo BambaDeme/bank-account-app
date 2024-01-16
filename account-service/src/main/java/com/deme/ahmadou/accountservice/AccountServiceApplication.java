@@ -1,5 +1,6 @@
 package com.deme.ahmadou.accountservice;
 
+import com.deme.ahmadou.accountservice.clients.CustomerRestClient;
 import com.deme.ahmadou.accountservice.entities.Account;
 import com.deme.ahmadou.accountservice.enums.AccountType;
 import com.deme.ahmadou.accountservice.repositories.AccountRepository;
@@ -22,36 +23,32 @@ public class AccountServiceApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(AccountRepository accountRepository){
-        return args -> {
-            List<Account> accountList = List.of(
-                    Account.builder()
-                            .accountId(UUID.randomUUID().toString())
-                            .balance(200_000)
-                            .currency("XOF")
-                            .type(AccountType.CURRENT_ACCOUNT)
-                            .customerId(1L)
-                            .createdAt(LocalDate.now())
-                            .build(),
-                    Account.builder()
-                            .accountId(UUID.randomUUID().toString())
-                            .balance(300_000)
-                            .currency("XOF")
-                            .type(AccountType.CURRENT_ACCOUNT)
-                            .customerId(2L)
-                            .createdAt(LocalDate.now())
-                            .build(),
-                    Account.builder()
-                            .accountId(UUID.randomUUID().toString())
-                            .balance(500_000)
-                            .currency("XOF")
-                            .type(AccountType.SAVING_ACCOUNT)
-                            .customerId(3L)
-                            .createdAt(LocalDate.now())
-                            .build()
-            );
+    CommandLineRunner commandLineRunner(AccountRepository accountRepository, CustomerRestClient customerRestClient){
 
-            accountRepository.saveAll(accountList);
+        return args -> {
+            customerRestClient.getAllCustomers().forEach(customer -> {
+
+                List<Account> accountList = List.of(
+                        Account.builder()
+                                .accountId(UUID.randomUUID().toString())
+                                .balance(Math.random()*200_000)
+                                .currency("XOF")
+                                .type(AccountType.CURRENT_ACCOUNT)
+                                .customerId(customer.getId())
+                                .createdAt(LocalDate.now())
+                                .build(),
+                        Account.builder()
+                                .accountId(UUID.randomUUID().toString())
+                                .balance(Math.random()*300_430)
+                                .currency("XOF")
+                                .type(AccountType.SAVING_ACCOUNT)
+                                .customerId(customer.getId())
+                                .createdAt(LocalDate.now())
+                                .build()
+                );
+                accountRepository.saveAll(accountList);
+            });
+
         };
     }
 
