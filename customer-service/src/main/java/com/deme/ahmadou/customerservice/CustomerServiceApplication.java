@@ -1,15 +1,27 @@
 package com.deme.ahmadou.customerservice;
 
+import com.deme.ahmadou.customerservice.config.GlobalConfig;
 import com.deme.ahmadou.customerservice.entities.Customer;
 import com.deme.ahmadou.customerservice.repositories.CustomerRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootApplication
+@EnableConfigurationProperties(GlobalConfig.class)
+@RestController
+@RefreshScope
 public class CustomerServiceApplication {
 
 	public static void main(String[] args) {
@@ -39,6 +51,30 @@ public class CustomerServiceApplication {
 
 			customerRepository.saveAll(customerList);
 		};
+	}
+
+	@Value("${global.params.x}")
+	private int x;
+
+	@Value("${global.params.y}")
+	private int y;
+
+	@Value("${customer.params.x}")
+	private int customerX;
+
+	@Value("${customer.params.y}")
+	private int customerY;
+
+	@GetMapping("/config")
+	public Map<String,Integer> config() {
+		return Map.of("x",x,"y",y,"customer x",customerX,"customer y",customerY);
+	}
+
+	@Autowired
+	private GlobalConfig globalConfig;
+	@GetMapping("/globalConfig")
+	public GlobalConfig globalConfig(){
+		return globalConfig;
 	}
 
 }
