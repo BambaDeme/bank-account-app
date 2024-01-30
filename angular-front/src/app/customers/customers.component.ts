@@ -1,11 +1,11 @@
-import { CommonModule, NgFor } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [CommonModule, NgFor],
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css'
 })
