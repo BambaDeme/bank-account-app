@@ -2,11 +2,11 @@ spring:
   cloud:
     gateway:
       globalcors:
-        cors-configurations:
+        corsConfigurations:
           '[/**]':
-            allowedOrigins: "http://localhost:4200"
+            allowedOrigins: "*"
             allowedHeaders: "*"
-            allowedMethods:
+            allowedMethodgitttgggs:
               - GET
               - POST
               - PUT
