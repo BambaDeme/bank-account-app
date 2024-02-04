@@ -76,3 +76,10 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
       interval: 10s
       retries: 5
+  ebank-front-angular:
+    build: ./angular-front
+    container_name: ebank-front-angular
+    ports:
+      - '80:80'
+    expose:
+      - '80'
